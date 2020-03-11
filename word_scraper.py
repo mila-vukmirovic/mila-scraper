@@ -1,6 +1,7 @@
 """ Scrape a website and return a dictionary of most used words """
 
 import re as _re
+import time as _time
 
 import bs4 as _bs4
 import requests as _requests
@@ -46,6 +47,7 @@ def _scrape_website(url: str) -> list:
             (<word>, <number of occurrences>),
             sorted by number of occurrences descending.
     """
+    t0 = _time.time()
     try:
         response = _requests.get(url, timeout=TIMEOUT_IN_SECONDS)
     except Exception as e:
@@ -70,6 +72,8 @@ def _scrape_website(url: str) -> list:
     sorted_words = [(k, words[k]) for k in
                     sorted(words.keys(), key=lambda k: words[k], reverse=True)]
 
+    duration = _time.time() - t0
+    print(f"Successfully crawled url: {url} in {duration:.2f} seconds.")
     return sorted_words
 
 
